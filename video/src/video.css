@@ -1,0 +1,15 @@
+/* Penyesuaian prototipe untuk layar HP di dalam video (lebar 400px, satu kolom). */
+.site .grid2{grid-template-columns:minmax(0,1fr)}
+.site .scrim{position:absolute;inset:0;place-items:end center}
+.site .toast{position:absolute}
+.site .wrap{padding-block:20px 0}
+.site{font:400 15px/1.55 var(--f-body);color:var(--ink);-webkit-font-smoothing:antialiased}
+.site .inp.caret::after{content:""}
+.caret-bar{display:inline-block;width:2px;height:1.1em;background:var(--blue);vertical-align:-3px;margin-left:1px}
+
+/* Kanvas video */
+.v-root{font-family:var(--f-body);color:var(--ink);background:radial-gradient(1400px 620px at 50% -160px,var(--sky),transparent 72%),var(--paper)}
+.v-eyebrow{font:700 48px/1.1 var(--f-display);font-stretch:85%;color:var(--rose);letter-spacing:.02em;text-transform:uppercase}
+.v-cap{font:800 68px/1.08 var(--f-display);font-stretch:80%;color:var(--ink);text-wrap:balance;letter-spacing:-.005em}
+.v-sub{font:500 48px/1.22 var(--f-body);color:var(--ink-2);text-wrap:balance}
+.v-band{font-family:var(--f-display);font-stretch:75%;font-weight:700;text-transform:uppercase;line-height:.95}

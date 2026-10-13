@@ -1,0 +1,22 @@
+{
+  "name": "tutorial-lo-wisuda",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render Tutorial916 out/tutorial-lo-9x16.mp4",
+    "render:169": "remotion render Tutorial169 out/tutorial-lo-16x9.mp4",
+    "stills": "node scripts/stills.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@remotion/cli": "^4.0.535",
+    "@types/react": "^18.3.31",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.535",
+    "typescript": "^7.0.2"
+  }
+}
