@@ -1,0 +1,933 @@
+<title>Booking LO Wisuda SBM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: tiket pertunjukan di dinding plester Santorini. Tiket = objek utama, biru tinta untuk aksi, bougainvillea hanya di tepi. */
+:root{
+  --paper:#F4F1E8; --plaster:#FFFDF7; --plaster-2:#F8F4EA;
+  --ink:#14215A; --ink-2:#4A5482; --ink-3:#7F88AE;
+  --blue:#2443B0; --blue-deep:#16287C; --on-blue:#FFFDF7;
+  --sky:#C9E2F6; --sand:#E2D2B2; --pink:#E0447D; --rose:#B4466A; --leaf:#5F8E5B;
+  --band-1:#1A3496; --band-2:#3D74D3; --band-3:#9BCDF1; --band-text:#FFFDF7;
+  --sun-1:#F7C98B; --sun-2:#F3E3C4; --sea:#2E5DB0;
+  --line:#E3DCCB; --line-2:#CFC6B1;
+  --ok:#1D7550; --ok-bg:#E2F2E8; --warn:#8F5600; --warn-bg:#FBEFD5; --danger:#B0233A; --danger-bg:#FBE3E7;
+  --shadow:rgba(20,33,90,.16); --scrim:rgba(14,22,60,.45);
+  --f-display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r-s:8px; --r-m:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0A1230; --plaster:#121C45; --plaster-2:#0F183C;
+  --ink:#EDF0FB; --ink-2:#B2BADA; --ink-3:#7C86B0;
+  --blue:#86A3FF; --blue-deep:#2D47AE; --on-blue:#0A1230;
+  --sky:#18275E; --sand:#3B3B58; --pink:#FF6E9F; --rose:#E27D9F; --leaf:#5E8C62;
+  --band-1:#172A7E; --band-2:#3253C2; --band-3:#5E8BE0; --band-text:#F4F6FF;
+  --sun-1:#E9A86A; --sun-2:#3A3D73; --sea:#1D3B86;
+  --line:#25326A; --line-2:#34437F;
+  --ok:#62D3A1; --ok-bg:#0F3A2B; --warn:#F2B654; --warn-bg:#3A2A0C; --danger:#FF8494; --danger-bg:#3E1521;
+  --shadow:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.6); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#0A1230; --plaster:#121C45; --plaster-2:#0F183C;
+  --ink:#EDF0FB; --ink-2:#B2BADA; --ink-3:#7C86B0;
+  --blue:#86A3FF; --blue-deep:#2D47AE; --on-blue:#0A1230;
+  --sky:#18275E; --sand:#3B3B58; --pink:#FF6E9F; --rose:#E27D9F; --leaf:#5E8C62;
+  --band-1:#172A7E; --band-2:#3253C2; --band-3:#5E8BE0; --band-text:#F4F6FF;
+  --sun-1:#E9A86A; --sun-2:#3A3D73; --sea:#1D3B86;
+  --line:#25326A; --line-2:#34437F;
+  --ok:#62D3A1; --ok-bg:#0F3A2B; --warn:#F2B654; --warn-bg:#3A2A0C; --danger:#FF8494; --danger-bg:#3E1521;
+  --shadow:rgba(0,0,0,.5); --scrim:rgba(0,0,0,.6); color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1100px 380px at 50% -120px,var(--sky),transparent 75%),var(--paper);color:var(--ink);font:400 15px/1.55 var(--f-body);min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2)} .faint{color:var(--ink-3)}
+.eyebrow{font:600 11px/1.2 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+
+/* Bar pratinjau (bukan bagian aplikasi) */
+.pv{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--ink);color:var(--paper);padding:8px 16px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12.5px}
+.pv b{font-family:var(--f-mono);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:11px;margin-right:4px}
+.pv button{background:transparent;border:1px solid color-mix(in srgb,var(--paper) 35%,transparent);color:var(--paper);border-radius:99px;padding:3px 10px;cursor:pointer;font-size:12.5px}
+.pv button[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+.pv .sp{flex:1}
+
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:24px 0}
+.narrow{max-width:560px;margin:0 auto}
+
+/* Tiket */
+.tk-shadow{filter:drop-shadow(0 8px 16px var(--shadow))}
+.ticket{--r:6px;--step:20px;position:relative;background:var(--plaster);
+  -webkit-mask:radial-gradient(circle at 0 50%,#0000 var(--r),#000 calc(var(--r) + .5px)) 0 0/51% var(--step) repeat-y,radial-gradient(circle at 100% 50%,#0000 var(--r),#000 calc(var(--r) + .5px)) 100% 0/51% var(--step) repeat-y;
+          mask:radial-gradient(circle at 0 50%,#0000 var(--r),#000 calc(var(--r) + .5px)) 0 0/51% var(--step) repeat-y,radial-gradient(circle at 100% 50%,#0000 var(--r),#000 calc(var(--r) + .5px)) 100% 0/51% var(--step) repeat-y}
+.stars{color:var(--rose);letter-spacing:.5em;font-size:13px;line-height:1}
+.band{background:linear-gradient(180deg,var(--band-1) 0%,var(--band-1) 42%,var(--band-2) 78%,var(--band-3) 100%);color:var(--band-text);font-family:var(--f-display);font-stretch:75%;font-weight:700;text-transform:uppercase;letter-spacing:.01em}
+.rule{display:flex;align-items:center;gap:8px;color:var(--blue)}
+.rule::before,.rule::after{content:"";flex:1;height:1.5px;background:currentColor}
+.meta3{display:grid;grid-template-columns:1fr 1.3fr 1fr;text-align:center;color:var(--blue);font:600 13px/1.25 var(--f-display)}
+.meta3>div{padding:10px 6px}
+.meta3>div+div{border-left:1.5px solid var(--blue)}
+
+/* Beranda */
+.home{display:grid;gap:22px;justify-items:center;padding-block:8px 32px}
+.home h1{font-size:clamp(34px,8vw,54px);font-stretch:80%;font-weight:800;color:var(--ink);text-align:center}
+.home .lead{max-width:44ch;text-align:center;color:var(--ink-2);margin:0}
+.big-ticket{width:min(100%,560px);border:0;padding:0;background:none;cursor:pointer;text-align:left;transition:transform .2s}
+.big-ticket:hover{transform:translateY(-3px) rotate(-.4deg)}
+.big-ticket .ticket{padding:18px 30px 16px;display:grid;gap:12px}
+.big-ticket .band{font-size:clamp(46px,13vw,84px);line-height:.95;text-align:center;padding:14px 8px 18px}
+.big-ticket .cta{display:flex;justify-content:space-between;align-items:center;font:600 14px var(--f-body);color:var(--blue)}
+.stub-btn{border:0;padding:0;background:none;cursor:pointer;transition:transform .2s}
+.stub-btn:hover{transform:translateY(-2px) rotate(.6deg)}
+.stub-btn .ticket{--r:5px;--step:16px;padding:12px 26px;display:flex;align-items:center;gap:12px;color:var(--ink)}
+.stub-btn .ticket b{font:700 17px var(--f-display);font-stretch:85%;text-transform:uppercase;letter-spacing:.04em;color:var(--blue)}
+.home-foot{display:flex;gap:14px;align-items:center;font-size:13px;color:var(--ink-3)}
+.linkbtn{background:none;border:0;padding:0;color:var(--blue);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:inherit}
+
+.flora{position:fixed;pointer-events:none;z-index:0;width:min(34vw,260px);opacity:.95}
+.flora.tl{top:30px;left:-30px}
+.flora.br{bottom:30px;right:-36px;transform:rotate(180deg)}
+.app{position:relative;z-index:1}
+.tiles{display:block;width:100%;height:34px;margin-top:40px}
+
+/* Kartu & form */
+.card{background:var(--plaster);border:1px solid var(--line);border-radius:var(--r-m);padding:20px}
+.stack{display:grid;gap:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+label.f{display:grid;gap:6px;font-weight:600;font-size:13.5px}
+.inp{width:100%;background:var(--plaster-2);border:1.5px solid var(--line-2);border-radius:var(--r-s);padding:11px 12px;font-size:15px;min-width:0}
+.inp:focus{border-color:var(--blue);outline:none}
+textarea.inp{min-height:84px;resize:vertical}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:99px;border:1.5px solid var(--blue);background:var(--blue);color:var(--on-blue);font-weight:600;padding:9px 18px;cursor:pointer;font-size:14px;white-space:nowrap}
+.btn:hover{background:var(--blue-deep);border-color:var(--blue-deep);color:var(--band-text)}
+.btn.ghost{background:transparent;color:var(--blue)}
+.btn.ghost:hover{background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--blue)}
+.btn.danger{background:transparent;border-color:var(--danger);color:var(--danger)}
+.btn.danger:hover{background:var(--danger-bg)}
+.btn.sm{padding:5px 12px;font-size:13px}
+.btn.block{width:100%;padding:12px 18px;font-size:15px}
+.btn[disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:11px 16px;border-radius:99px;border:1.5px solid var(--line-2);background:var(--plaster);font-weight:600;cursor:pointer}
+.gbtn:hover{border-color:var(--blue)}
+.note{border-radius:var(--r-s);padding:10px 12px;font-size:13.5px;line-height:1.45}
+.note.err{background:var(--danger-bg);color:var(--danger)}
+.note.ok{background:var(--ok-bg);color:var(--ok)}
+.note.warn{background:var(--warn-bg);color:var(--warn)}
+.note.info{background:color-mix(in srgb,var(--sky) 60%,var(--plaster));color:var(--ink)}
+.back{background:none;border:0;color:var(--ink-2);cursor:pointer;padding:0;font-size:14px;display:inline-flex;gap:6px;align-items:center}
+.back:hover{color:var(--blue)}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:2px 9px;font:600 11.5px/1.6 var(--f-mono);letter-spacing:.03em;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.warn{background:var(--warn-bg);color:var(--warn)}
+.pill.err{background:var(--danger-bg);color:var(--danger)} .pill.neu{background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue)}
+.pill.full{background:var(--rose);color:var(--plaster)}
+
+/* Prodi */
+.prodi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.prodi{border:0;background:none;padding:0;cursor:pointer;text-align:left}
+.prodi .ticket{padding:20px 28px;display:grid;gap:8px;min-height:150px;transition:transform .2s}
+.prodi:hover .ticket{transform:translateY(-2px)}
+.prodi .code{font:600 12px var(--f-mono);color:var(--rose);letter-spacing:.1em}
+.prodi h3{font-size:30px;font-stretch:80%;font-weight:800;color:var(--blue);text-transform:uppercase}
+
+/* Login */
+.login{display:grid;grid-template-columns:1fr;gap:18px}
+.port{width:120px;height:120px;border-radius:50%;overflow:hidden;border:4px solid var(--plaster);box-shadow:0 6px 18px var(--shadow);flex:none}
+
+/* Dashboard */
+.dash-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.dash-head h1{font-size:clamp(28px,6vw,40px);font-stretch:82%;font-weight:800}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.55fr);gap:20px;align-items:start}
+@media (max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.rules{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:r}
+.rules li{display:grid;grid-template-columns:26px 1fr;gap:8px;font-size:14px;counter-increment:r}
+.rules li::before{content:counter(r);width:24px;height:24px;border-radius:50%;background:var(--blue);color:var(--on-blue);display:grid;place-items:center;font:600 12px var(--f-mono)}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
+.cd>div{background:var(--plaster-2);border:1px solid var(--line);border-radius:var(--r-s);text-align:center;padding:8px 2px 6px}
+.cd b{display:block;font:600 24px/1 var(--f-mono);color:var(--blue);font-variant-numeric:tabular-nums}
+.cd span{font-size:11px;color:var(--ink-3)}
+.status .ticket{padding:16px 26px;display:grid;gap:10px}
+.status .band{font-size:28px;line-height:1.05;padding:10px 12px 12px;border-radius:2px}
+.status.empty .band{background:repeating-linear-gradient(135deg,var(--plaster-2) 0 10px,var(--line) 10px 11px);color:var(--ink-3)}
+.perf{border-top:2px dashed var(--line-2);margin:4px -26px 0;padding:10px 26px 0}
+
+.list-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.list-head h2{font-size:24px;font-stretch:85%;font-weight:800;margin-right:auto}
+.search{position:relative;flex:1 1 260px;min-width:0}
+.search .inp{padding-left:36px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-3)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line-2);background:transparent;border-radius:99px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--ink-2)}
+.chip[aria-pressed="true"]{border-color:var(--blue);background:var(--blue);color:var(--on-blue)}
+.lo-list{display:grid;gap:8px}
+.lo{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;background:var(--plaster);border:1px solid var(--line);border-radius:var(--r-m);padding:12px 14px}
+.lo.mine{border-color:var(--blue);box-shadow:inset 4px 0 0 var(--blue)}
+.lo.isfull{background:var(--plaster-2)}
+.lo-name{font-weight:600;font-size:15px}
+.lo-sub{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2);grid-column:1/-1}
+.seats{display:inline-flex;gap:3px;vertical-align:middle}
+.seats i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--blue)}
+.seats i.on{background:var(--blue)}
+.seats i.over{background:var(--pink);border-color:var(--pink)}
+.who{display:inline-flex;flex-wrap:wrap;gap:4px}
+.who span{background:var(--plaster-2);border:1px solid var(--line);border-radius:6px;padding:0 6px;font-size:12px;color:var(--ink)}
+.who span.hit,.lo-name mark{background:color-mix(in srgb,var(--pink) 22%,transparent);color:inherit;border-color:var(--pink)}
+mark{background:color-mix(in srgb,var(--pink) 22%,transparent);color:inherit;border-radius:3px}
+.empty-list{padding:28px;text-align:center;color:var(--ink-2);border:1.5px dashed var(--line-2);border-radius:var(--r-m)}
+.sec{margin-top:28px}
+.sec>h2{font-size:24px;font-stretch:85%;font-weight:800;margin-bottom:6px}
+.tag-in{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue);border-radius:99px;padding:3px 6px 3px 10px;font-size:13px;font-weight:500}
+.tag button{border:0;background:none;color:inherit;cursor:pointer;padding:0 4px;font-size:15px;line-height:1}
+.sugg{display:grid;border:1px solid var(--line);border-radius:var(--r-s);background:var(--plaster);max-height:200px;overflow:auto}
+.sugg button{text-align:left;border:0;background:none;padding:8px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+.sugg button:hover{background:var(--plaster-2)}
+.req{border:1px solid var(--line);border-radius:var(--r-m);padding:14px;display:grid;gap:8px;background:var(--plaster)}
+.req .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 10px;font-size:13.5px}
+.kv dt{color:var(--ink-3)} .kv dd{margin:0}
+
+/* Tabel & panel */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-m);background:var(--plaster)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);background:var(--plaster-2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1.5px solid var(--line);margin-bottom:18px;scrollbar-width:none}
+.tabs button{border:0;background:none;padding:10px 12px;cursor:pointer;color:var(--ink-2);font-weight:600;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--blue);border-bottom-color:var(--blue)}
+.tabs .count{font:500 11px var(--f-mono);background:var(--pink);color:var(--plaster);border-radius:99px;padding:0 6px;margin-left:4px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{background:var(--plaster);border:1px solid var(--line);border-radius:var(--r-m);padding:14px 16px;display:grid;gap:6px}
+.stat .n{font:600 30px/1 var(--f-mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.stat .n small{font-size:15px;color:var(--ink-3)}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--blue);border-radius:99px}
+.hist{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:end;height:130px;padding-top:8px}
+.hist>div{display:grid;gap:4px;justify-items:center;align-content:end;height:100%}
+.hist .col{width:100%;max-width:46px;background:var(--blue);border-radius:6px 6px 0 0;min-height:2px}
+.hist .col.over{background:var(--pink)}
+.hist .v{font:600 12px var(--f-mono)} .hist .l{font-size:11.5px;color:var(--ink-3)}
+
+/* Modal & toast */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:50;display:grid;place-items:end center;padding:16px}
+@media (min-width:640px){.scrim{place-items:center}}
+.sheet{background:var(--plaster);border-radius:18px;padding:22px;width:min(100%,460px);display:grid;gap:14px;box-shadow:0 20px 50px var(--shadow);max-height:90vh;overflow:auto}
+.sheet h3{font-size:24px;font-stretch:85%;font-weight:800}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:99px;font-size:14px;z-index:60;max-width:calc(100% - 32px);box-shadow:0 8px 24px var(--shadow)}
+.spin{width:16px;height:16px;border:2px solid var(--line-2);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:520px){
+  .big-ticket .ticket{padding:14px 20px}
+  .meta3{font-size:11.5px}
+  .flora{width:150px;opacity:.75}
+  .kv{grid-template-columns:90px minmax(0,1fr)}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="bract">
+      <path d="M0 0 C-9 -6 -12 -18 -4 -24 C0 -27 4 -26 6 -22 C10 -14 6 -6 0 0Z" class="pt1"/>
+      <path d="M0 0 C-9 -6 -12 -18 -4 -24 C0 -27 4 -26 6 -22 C10 -14 6 -6 0 0Z" class="pt2" transform="rotate(120)"/>
+      <path d="M0 0 C-9 -6 -12 -18 -4 -24 C0 -27 4 -26 6 -22 C10 -14 6 -6 0 0Z" class="pt1" transform="rotate(240)"/>
+      <circle r="2.4" class="pc"/>
+    </g>
+    <path id="leaf" d="M0 0 C6 -8 18 -10 26 -4 C18 4 6 6 0 0Z" class="lf"/>
+  </defs>
+</svg>
+<style>
+.pt1{fill:var(--pink)} .pt2{fill:color-mix(in srgb,var(--pink) 78%,var(--plaster))} .pc{fill:var(--sun-2)} .lf{fill:var(--leaf)}
+.az-bg{fill:var(--plaster)} .az-a{fill:none;stroke:var(--blue);stroke-width:1.6} .az-b{fill:var(--blue)} .az-c{fill:color-mix(in srgb,var(--blue) 30%,var(--plaster))}
+</style>
+
+<div class="pv" role="toolbar" aria-label="Kontrol pratinjau">
+  <b>Pratinjau desain</b>
+  <button data-act="pv-home">Beranda</button>
+  <button data-act="pv-wis">Dashboard wisudawan</button>
+  <button data-act="pv-lo">Halaman LO</button>
+  <button data-act="pv-admin">Panel panitia</button>
+  <span class="sp"></span>
+  <button data-act="pv-dead" id="pv-dead" aria-pressed="false">Simulasikan lewat deadline</button>
+  <button data-act="pv-theme" id="pv-theme">Tema: sistem</button>
+</div>
+
+<svg class="flora tl" viewBox="0 0 240 200" aria-hidden="true">
+  <use href="#leaf" transform="translate(40 60) rotate(20)"/><use href="#leaf" transform="translate(120 40) rotate(-30)"/><use href="#leaf" transform="translate(90 120) rotate(60)"/>
+  <use href="#bract" transform="translate(60 50) scale(1.5)"/><use href="#bract" transform="translate(110 70) scale(1.2) rotate(40)"/>
+  <use href="#bract" transform="translate(150 30) scale(1.1) rotate(-20)"/><use href="#bract" transform="translate(30 110) scale(1.25) rotate(70)"/>
+  <use href="#bract" transform="translate(95 125) scale(.95) rotate(15)"/><use href="#bract" transform="translate(190 55) scale(.8) rotate(90)"/>
+</svg>
+<svg class="flora br" viewBox="0 0 240 200" aria-hidden="true">
+  <use href="#leaf" transform="translate(50 70) rotate(10)"/><use href="#leaf" transform="translate(130 50) rotate(-40)"/>
+  <use href="#bract" transform="translate(70 55) scale(1.4)"/><use href="#bract" transform="translate(125 80) scale(1.1) rotate(30)"/>
+  <use href="#bract" transform="translate(35 115) scale(1.15) rotate(60)"/><use href="#bract" transform="translate(170 40) scale(.9) rotate(-10)"/>
+</svg>
+
+<main class="app" id="app"></main>
+
+<svg class="tiles" aria-hidden="true" preserveAspectRatio="none">
+  <defs><pattern id="az" width="34" height="34" patternUnits="userSpaceOnUse">
+    <rect width="34" height="34" class="az-bg"/>
+    <path d="M0 0h8a8 8 0 0 1-8 8zM34 0v8a8 8 0 0 1-8-8zM0 34v-8a8 8 0 0 1 8 8zM34 34h-8a8 8 0 0 1 8-8z" class="az-c"/>
+    <circle cx="17" cy="10.5" r="6" class="az-a"/><circle cx="23.5" cy="17" r="6" class="az-a"/><circle cx="17" cy="23.5" r="6" class="az-a"/><circle cx="10.5" cy="17" r="6" class="az-a"/>
+    <circle cx="17" cy="17" r="2.6" class="az-b"/><rect x=".5" y=".5" width="33" height="33" class="az-a" style="stroke-width:.8"/>
+  </pattern></defs>
+  <rect width="100%" height="100%" fill="url(#az)"/>
+</svg>
+<div id="layer"></div>
+
+<script>
+/* ===== Data asli (tanpa email) ===== */
+const G_RAW=`19019110 Pavita Hamidatunnyssa
+19020297 Arria SrinardwitaNarawidjna
+19021045 Raditya Ghani
+19021089 Ahmad Zaki Handoyo
+19021187 Firdha Sahra
+19022167 Muhammad Cheva Meindra
+19022172 Patricia Devynna
+19022173 Tabina Amarilla Putri Arief
+19022189 Teuku Fayzal Putra Handalan
+19022190 Narandra Dharmmesta
+19022191 Ahmad Haykal Dwitama Soekasah
+19022200 Fahrulia Rahmania
+19022207 Mochammad Aldy Febrian
+19022210 Muhammad Gabriel Rais
+19022221 Eliana Azizah Nursalamah
+19022231 Aldio Aryayudha
+19022241 Ida Ayu Merlyn Ardhia Prada
+19022252 Joel Hehakaja
+19022254 Muharriz Adib Jaya
+19022262 Risjad Nukman
+19022281 Irsyad abdillah aulia
+19022283 Ayman Rabani Bagaskara
+19022287 Muhammad Reza Nanda Wisdana
+19023001 Nathania Siregar
+19023002 Gagah Athallah Fatha
+19023003 Vincent Samuel Gunawan
+19023005 Alisha Anjani Putri Mahfuzi
+19023006 Nisrina Wulan Kusuma
+19023007 Julia Margaretha Situmorang
+19023008 Muhammad Zakir Karim
+19023009 Abdul Rahman Hakim Ar-Rasyid Pramono
+19023010 Dio Hari Syahputra
+19023011 Nasywa Nayshilla Rahmadissa Budiawan
+19023012 Miranda Ame Felecia Br. Ginting
+19023013 Evan Soejoto
+19023014 Ryu Abhipraya Herawanto
+19023015 Arnold Josaphat Siahaan
+19023016 Dionisius Viandi Putra
+19023017 Rachelle Wibisono
+19023019 Allya Rasyana Easter Nelwan
+19023020 Grace Hotma Asi Nainggolan
+19023021 Shafiqa Aliya Harahap
+19023022 Salwa Nissa Adristi
+19023023 Naurah Annisa Halwa Rizqulloh
+19023024 Keisha Luna Vashti
+19023025 Nauval Dakka Yuwana
+19023026 Yogi Chegovara Pratama
+19023028 John Jevon Matongon Purba
+19023029 Hana Luthfia Rahman
+19023030 Dara Eldina Hutajulu
+19023031 Keisha Amalia Rahmadini
+19023033 Aisyah Ittaqi
+19023034 Darryl Sandrina Faisal Putri
+19023035 Luthfia Nur Azizah
+19023037 Muhammad Abdillah Putra Alfera
+19023038 Inara Sarazmyta Zondra
+19023039 Fito Hadiantama Trisnanto
+19023040 Zahra Nadindra Aulia
+19023041 Alya Azahra
+19023042 Mohammad Graciano Fausta
+19023043 Muhammad Hanif Alfarezi
+19023044 Alvin Barra Khalish
+19023045 Caesar Romeo
+19023046 Muhammad Rizqi Alghifary
+19023048 Naomi Asa Shannda
+19023049 Fariez Darrell Tristan Aribowo
+19023050 Muhammad Yasin Ar Rumi
+19023051 Erina Fidela
+19023052 Agatbe Thymoty Sihombing
+19023053 Nathan Mario Tjahjadi
+19023054 Arifa Khairunnisa
+19023055 Kayla Adina Wirdamulia
+19023056 Faris Irham Yusufandika
+19023057 Nochiofy Budi Fitriany
+19023058 Ketut Ayu Anjelita Sintyananda
+19023059 Kania Azra Putri Fahlepi
+19023060 Cindy Marcella Nathania
+19023061 Karrine Antonius
+19023062 Joy Daniel Bangun
+19023063 Haura Tazskiya Faisal
+19023064 Aulia Syiffa Ricelia Putri Nugraha
+19023065 Jonathan Jusuf
+19023066 Theresia Yoana
+19023067 Shafara Amanah Indrawan
+19023068 Hartanti Maharani
+19023070 Afina Carissa Ikhsan
+19023071 Fitratul Jannah Putri Ananda
+19023072 Candra Wijaya Rahman
+19023073 Ferdinand Harly Kusnadi
+19023074 Muhammad Davin Ardhan Hafiz
+19023075 Nashwa Noor Amila
+19023076 Alya Tabitha Maharani
+19023077 Nisrina Zulkhairi Putri
+19023078 Rachael Immanuel Tambunan
+19023079 Callista Audrey Sunjaya
+19023080 Shafina Junita Sari
+19023081 Naufal Khairata Rizal
+19023082 Keyfine
+19023083 Napitupulu, Clara Priscilla Alethea
+19023084 Camelia Rizky Khaerunnisa Purnomo
+19023085 Zefanya Valentino Bastanta Tarigan
+19023086 Grace Nathasya Eltrien
+19023087 Salsabila
+19023088 Rhiza
+19023089 Rasikha Zafiraliya
+19023091 Zahrah Nadhirah
+19023092 Adzra Fathy Fauziyyah
+19023093 Dinda Puspita Sari
+19023094 Adira Rachma Azalia
+19023095 Senandung Shauma Bidadari
+19023096 Ahmad Wildan Aryana
+19023097 Alya Khansa Ardelia
+19023099 Nataliana Alma Butar Butar
+19023100 Mattea Vasili
+19023101 Alexander Andre Tamin
+19023102 Sovi Olivia
+19023103 Alviena Indah Pasepa
+19023104 Ayesha Ghaisani
+19023105 Ahmad Zaki
+19023106 Hasyafiya Faza Fitri
+19023107 Catharine Br. Pasaribu
+19023108 Shavirra Excel Firmandya
+19023109 Muhammad Akhtar Rahman Haqqi
+19023110 Michelle Angelique Yogatama
+19023111 Fernanda Nasywaa Ferdinan
+19023112 Agnes Winona Vania Oey
+19023114 Egiza Az-Zahra Rustandi
+19023115 Nazala Mentari Fathia
+19023116 Yolanda Victoria Hailitik
+19023117 Haifahasna Aqila Az-Zahra
+19023118 Rezhio Rizq Adiendra Wibowo
+19023119 Leora Josephine Gionina
+19023120 Harits Imtiyaaz Tresna Putra
+19023121 Fadhlan Yazid Baihaqi
+19023122 Kissa Rafa Kalila
+19023123 Ulya Tania
+19023124 Grace Charvia
+19023125 Abigail Nathalie
+19023126 Maria Anabel Nugroho
+19023127 Sayyidah Nafisah
+19023128 Juan Christofel Advent Thio
+19023129 Nelson Aria Suryadi
+19023130 Patricia Angelique Erawan
+19023131 Adi Ahmad Hidayat
+19023132 Dzykra Latifah Atshir
+19023133 Evangelina Ave Maria Sunatoputri
+19023134 Devina Jefanya
+19023135 Gabriel Giovanni Ginting
+19023136 Rizky Saputri
+19023137 Sherly Agatha Hamdani
+19023138 Daffa Restu Maulana
+19023139 Alivia Hadijah
+19023140 Nindya Qurrota 'Aini
+19023141 Alya Taqiyyasafi
+19023142 Philip Lavian Suwanto
+19023143 Maximilian Yoga Ananta Widyopranoto
+19023144 Amanda Maritza Amalina
+19023145 Milda Putri Apriliani
+19023146 Jeremy Nico Estrada Sitorus
+19023147 Audry Regina Putri
+19023148 Sarah Ann Ullyma Manihuruk
+19023149 Tamara Arta Sari
+19023150 Sarah Najiyya
+19023151 Hanif Rabbani
+19023152 Keysha Davina Ryan
+19023153 Alvin Candra Matuarron Purba
+19023154 Joy Sihotang
+19023155 Nisrina Felicia Hasna Siregar
+19023156 Muhammad Razka Safa Pranaya
+19023157 Maheswari Waranggani Arkana
+19023158 Givi Catrine Anastasya
+19023159 Jessica Alexandra Tjiang
+19023160 Nadya Atsila Zhafira
+19023161 Imanuela Tiurma Silalahi
+19023162 Siti Aqilah Intani
+19023163 Muhammad Rajaa' Ra-Uuf
+19023164 Anaya Isadinar
+19023165 Akmal Abdurrasyid
+19023166 Angel Kumaladita
+19023167 Baghas Mahendra Jati
+19023168 Darrell Rayyan Sanyoto
+19023169 Adra Grimonia
+19023170 Adsila Luna Putri Setiawan
+19023177 Ahmad Fathan
+19023194 Alya Salsabila
+19023195 Harry William Tjhia
+19023196 Zahra Aliyya Rachman
+19023204 Fatin Fareldi
+19023209 Justin Nathan
+19023214 Jasmine Maisya Andini
+19023220 Ghassan Rabbani Sofhian
+19023221 Yasmin Amira Syafiqa
+19023225 Satrio Bagus Mulyana Kiswantoro
+19023228 Aqila Rasheeda Rahman
+19023230 Kayla Sana Nabiha
+19023235 Jiro Attalah Bangsawan
+19023258 Al Arif Athallah
+19023259 Dior Joanne Ivanka
+19023266 Naira Cyrilla Ammarani
+19221025 Fairuuz Fawwas Alfarizi Tantuayo
+19222004 Rayyan Muhammad Avisena Agus
+19222078 Abra Bumandhala Byoma
+19223001 William Raynold Simarmata
+19223002 Gustika Shashabila Dewi
+19223003 Wina Aliyyah Salsabiila
+19223004 Cleosia Stefanie
+19223006 Andhika Fikri Wijaya
+19223008 Zaviera Aldora Felia Putri
+19223009 Seintani Zalukhu
+19223010 Zahrashofaa Arrumsari
+19223011 Alif Rizqy Abdallah
+19223012 Nabilah Halfa Salsabilah
+19223013 Qalifha Ahmad Rabbani
+19223014 Aisha Nurin Mazaya
+19223015 Ayesha Salwa Mumtaza
+19223016 Luthfiya Raudina Siska
+19223017 Sean Dorothy Lumban Gaol
+19223018 Aurelia Viny Natania
+19223019 Fidela Ivena Christiadi
+19223020 Marsha Talitha
+19223021 Adinda Mariska Kesuma Firdaus
+19223022 Kezia Zevanya Angela
+19223023 Nadia Hana Prabawayudha
+19223024 Seren Ernelya
+19223026 Felice Hillary Yogaswara
+19223027 Kinanti Puspanegara
+19223028 Keishandita Ergitamanda
+19223029 Jonathan Washington Manuel Saragih
+19223030 Keisha Tiara Nafthaly
+19223031 Caesya Sakinah
+19223032 Pande Putu Bintang Citra Rahayu
+19223033 Neva Vanessa Young
+19223034 Nisrina Najla Nurhasanah
+19223035 Areta Bratandari
+19223036 Naufal Dzaki Falih
+19223037 Raishwara Putri Armala
+19223038 Raissa Ramadhina Al Faisal
+19223039 Adinda Dwi Cahyani Haryanto
+19223040 Hafiz Rahadian Ghani Wijayanto
+19223041 Fatiha Nur Annisa
+19223042 Salwa Azzahra Panggabean
+19223044 Muhammad Azka Yasyfa
+19223045 Aulia Rahman
+19223047 Fidela Ghania Putri
+19223048 Muhamad Gentar Pamungkas
+19223049 Muhammad Frizky Octora Setiawan
+19223050 Maghfira Alvia Maharani
+19223061 Aliyah Mauraputri Hermawan Ismail`;
+const CATATAN={"19022210":"Alihan Wisudawan Agustus 2026"};
+const IMK_RAW=`Golda Theoma Siregar|Jessie Gwen|Yohanna Doris Silalahi|Aisya Raudhatuzzahra Huwaydah|Sadina Athalia Khoir|Muhammad Akbar Darmawan|Muhammad Rijal|Vanessa Merry Joy Batubara|Azalia Azaria Shareefa|Sang Ayu Made Mahalodia Galuh Ayu Araliya|Nayyara Ghania Putri|Ilham Tribiantoro Firmansyah|Wianda Salsabila|Fadrian Prawiera Humaedi|R. R. Andrea Natasha Priambudi|Clarissa Zahra Wibowo|Ida Bagus Wisala Daneswara|Landry Chadelim|Hasya Talitha Aghniya|Nicks C’ven Nels|Kahla Jaziyah Yusuf|Aulianeza Heraveno`;
+const KMM_RAW=`Winson Fortuner Halim|Sofiya Zaina Karima|Pelangi Sekar Langit|Fransisca Alexia Saputra|Naila Alya|Naura Alyssa Azzahra Antory|Tsanin Azka Azizi|Kayla Aprilia|Yukari Andriyani|Fabian Armando Wenas|Kaysa Nadhilasyarifa Aryaniza|Kiandra Safia Maheshvari Faisal|Mochamad Mirza Ghulam Firdaus|Richell Fu|Edith Jocelyn Taniwijaya|Cecylia Kyrie Tiara Putri|Ayesha Erfi Shazia|Harashta Jannis Andriansyah|Abu Zaid Al Kiswara|Anaya Ghaalii Farraas Kumara|Adinda Namira Achmad|Aqiilah Nouranisa|Reisya Mahira Dibyacitta|Gafta Kamil|Muhammad Rakian Mangaraja|Muhammad Atharayyan Nugraha|Jovanca Theta Zefanya Ginting|Shafiyah Putri Risdiana|Adrio Ahmad Yassafi|Kayyisa Yumna Nalani|Matahari Almira Putri Helmy|Muhammad Rafa Akilah Siraj|Hasya Aqilah|Sarah Azizah Salsabila|Oriana Al Sadina Miza|Daffa Ardatama Ramadhan|Olivia Grasia Wahyudi|Clairine Christabel|Jauza Khalisha Puteri Utami|Andra Hakeem Ananda|Akma Safaraz Hammam|Fazya Anjelir Khairunnisa|Ashraf Zein Firjatullah El Haqim|Kathya Anjani Krisdaryanto|Marcia Christabelle|Nursita Kurniasih Subagiyo|Rafie Putra Mursalin|Grace Yolanda Saragih|Angelica Vianne Wiranata|Allycia Meyda Susilo Atmojo|Danisha Diandra|Kevin Alta|Immanuel Ryano|Joan Verina|Josafat Ranteallo|Stiven Gerald Tampubolon|Raidy A Erastia Khalfan|Saraihannisa Khairillah Meilano|Kayla Cantika Adinda Tangkari|Nasyra Mulyadita|Nikeisha Fadantya Azarini|Hilarie P Abigail Napitupulu|Pocut Aliska Tsaqif Ellena Alravy|Nazhira Fathima Azzahra|Revany Dealova Soekasno Putri|Rania Ayu Widya Ramadhani|Alesha Putri Susilo|Aliyyah Zahra Irawan|Faiz Umar Syarifuddin|Sitinjak Alexander Rafael H.|Mario Haganta Einstein Purba|Muhammad Zaky Mubarok|Rey Adityawangsa P.I|Zouvan Ananda Rachman|Keyzia Akhdaan Revano Hermawan|Arjuna Antar Hartono|M Rafa Kalihku Putra|Kaysan Altamis Wirawan|Raphael Martua Eben Ezer Siburian|Muhammad Fatih Kahuripan|Kim Eng Hutama Putra Hutapea|Michael Abimanyu R C Siahaan|Muhamad Abyan Ahmad Bagarib|Seraphim Kyana Nauli|Izzvy Almaisya Shaqeena|Fawzan Akmal Haniif|Madeline Shayna Immanuela|Raden Roro Najla B. F. Bramantyo|Allya Ruvikhtiar Adzani|Lavita Agastya|Rana Akilah Chakra Maulen|Alexandra Julia Likin|Renandya Malicca Chairudin|Azaia Latifa Widanti|Ayasha Aurelia|Arisa Nafisah Jahraa|Shanum Abeela Aqiilah Hermawan|Muhammad Malik Danawi|Dave Hanevi Goenarto|Chaniel Elnatan Simatupang|Ahyan Aydin Azzam|Rayendra Aryanara|Aiman Moeloek Sukawati`;
+
+const PRODI={"190":{nama:"Manajemen",him:"KMM"},"192":{nama:"Kewirausahaan",him:"IMK"}};
+const GRADS=G_RAW.split("\n").map(l=>{const i=l.indexOf(" ");const nim=l.slice(0,i);return{nim,nama:l.slice(i+1),prodi:nim.slice(0,3)}});
+const GBY=Object.fromEntries(GRADS.map(g=>[g.nim,g]));
+
+function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=rng(2026);
+const ALPH="ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+const code=p=>p+"-"+Array.from({length:5},()=>ALPH[Math.floor(R()*ALPH.length)]).join("");
+const LOS=[...KMM_RAW.split("|").map((n,i)=>({id:"K"+(i+1),nama:n,him:"KMM",quota:null,code:code("KMM")})),
+           ...IMK_RAW.split("|").map((n,i)=>({id:"I"+(i+1),nama:n,him:"IMK",quota:null,code:code("IMK")}))];
+const LBY=Object.fromEntries(LOS.map(l=>[l.id,l]));
+
+/* ===== State ===== */
+const S={view:"home",prodi:null,me:null,lo:null,admin:false,tab:"ringkasan",simAfter:false,quota:3,
+  deadline:new Date("2026-10-16T23:59:00+07:00"),assign:new Map(),reqs:[],logs:[],
+  login:{nim:"",err:null,step:"nim"},q:"",flt:"semua",draft:{jenis:"",los:[],teman:[],ket:"",loQ:"",nimQ:"",err:null},
+  aq:"",aflt:"semua",theme:"system"};
+const SRC={sendiri:"Pilihan sendiri",request:"Request",panitia:"Panitia",otomatis:"Panitia (otomatis)"};
+const now=()=>S.simAfter?S.deadline.getTime()+3600e3:Date.now();
+const locked=()=>now()>S.deadline.getTime();
+const cap=lo=>lo.quota??S.quota;
+const membersOf=id=>[...S.assign].filter(([,a])=>a.lo===id).map(([nim,a])=>({...GBY[nim],src:a.src}));
+const loadOf=id=>{let n=0;for(const a of S.assign.values())if(a.lo===id)n++;return n};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const first=n=>n.split(/[ ,]/)[0];
+const fmtT=t=>new Date(t).toLocaleString("id-ID",{timeZone:"Asia/Jakarta",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}).replace(/\./g,".")+" WIB";
+function log(actor,action,nim,from,to,extra){S.logs.unshift({t:now(),actor,action,nim,from,to,extra})}
+
+/* ===== Seed contoh (pilihan acak, bukan data nyata) ===== */
+(function seed(){
+  const T0=Date.parse("2026-10-13T08:00:00+07:00");
+  GRADS.forEach((g,i)=>{
+    if(R()>0.42)return;
+    const pool=LOS.filter(l=>l.him===PRODI[g.prodi].him&&loadOf(l.id)<cap(l));
+    const pick=R()<.55?pool[Math.floor(R()*Math.min(pool.length,12))]:pool[Math.floor(R()*pool.length)];
+    if(!pick)return;
+    S.assign.set(g.nim,{lo:pick.id,src:"sendiri"});
+    S.logs.unshift({t:T0+i*97e3,actor:g.nama,action:"memilih",nim:g.nim,to:pick.id});
+  });
+  S.reqs=[
+    {id:"R-014",by:"19023045",jenis:"Lebih dari 3 orang ingin satu LO",los:["K32"],teman:["19023049","19023053","19023062","19023065"],ket:"Kami berlima satu kelompok TA dan sudah kenal dekat dengan Rafa sejak kepanitiaan.",status:"menunggu",note:"",t:Date.parse("2026-10-13T10:12:00+07:00")},
+    {id:"R-011",by:"19223012",jenis:"Beberapa LO untuk satu kelompok teman",los:["I3","I5","I8"],teman:["19223014","19223015","19223016","19223018","19223019"],ket:"Enam wisudawan ingin didampingi tiga LO yang bersahabat supaya foto bersama lebih mudah.",status:"disetujui",note:"Disetujui, tetapkan 2 orang per LO.",t:Date.parse("2026-10-12T19:40:00+07:00")},
+    {id:"R-009",by:"19023110",jenis:"Lainnya",los:["K14"],teman:[],ket:"Saya ingin ganti ke LO yang bisa bahasa Mandarin karena keluarga dari luar negeri.",status:"ditolak",note:"Bahasa tidak termasuk kriteria. Silakan pilih langsung dari daftar.",t:Date.parse("2026-10-12T15:05:00+07:00")}];
+})();
+
+/* ===== Komponen kecil ===== */
+const I={
+  search:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`,
+  back:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>`,
+  g:`<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>`};
+const seats=(n,c)=>`<span class="seats" aria-hidden="true">${Array.from({length:Math.max(c,n)},(_,i)=>`<i class="${i<n?(i>=c?"over":"on"):""}"></i>`).join("")}</span>`;
+const statusPill=s=>({menunggu:'<span class="pill warn">Menunggu</span>',disetujui:'<span class="pill ok">Disetujui</span>',ditolak:'<span class="pill err">Ditolak</span>',selesai:'<span class="pill neu">Selesai</span>'}[s]);
+const backBtn=(to,label="Kembali")=>`<button class="back" data-act="go" data-to="${to}">${I.back}${label}</button>`;
+function hl(text,q){if(!q)return esc(text);const i=text.toLowerCase().indexOf(q.toLowerCase());if(i<0)return esc(text);return esc(text.slice(0,i))+"<mark>"+esc(text.slice(i,i+q.length))+"</mark>"+esc(text.slice(i+q.length))}
+function countdownHTML(){return `<div class="cd" data-cd><div><b data-d>0</b><span>hari</span></div><div><b data-h>00</b><span>jam</span></div><div><b data-m>00</b><span>menit</span></div><div><b data-s>00</b><span>detik</span></div></div>`}
+const port=`<svg class="port" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--band-3)"/><stop offset=".55" style="stop-color:var(--sun-2)"/><stop offset="1" style="stop-color:var(--sun-1)"/></linearGradient></defs><rect width="120" height="74" fill="url(#sk)"/><circle cx="60" cy="72" r="14" style="fill:var(--sun-1)"/><rect y="72" width="120" height="48" style="fill:var(--sea)"/><path d="M14 80h30M70 88h36M30 98h24" style="stroke:var(--sun-1);stroke-width:2;opacity:.7"/><path d="M84 70l0-22 12 20z M82 70l0-16-8 14z" style="fill:var(--ink)"/><path d="M72 72h28l-4 4H76z" style="fill:var(--ink)"/></svg>`;
+
+/* ===== Views ===== */
+function vHome(){return `<div class="wrap"><section class="home">
+  <div class="eyebrow">Perayaan Wisuda SBM ITB · Oktober 2026</div>
+  <h1>Kamu siapa?</h1>
+  <p class="lead">Pilih Liaison Officer yang akan mendampingimu di hari wisuda. Janjian dengan teman supaya kalian didampingi LO yang sama.</p>
+  <button class="big-ticket tk-shadow" data-act="go" data-to="prodi" aria-label="Saya wisudawan">
+    <div class="ticket">
+      <div class="stars" style="text-align:center">★ ★ ★ ★ ★</div>
+      <div class="band">Wisudawan</div>
+      <div class="rule"><span>✦</span></div>
+      <div class="meta3"><div>SBM ITB</div><div>Pilih LO<br>pendampingmu</div><div>2026</div></div>
+      <div class="rule"><span>✦</span></div>
+      <div class="cta"><span class="stars">★ ★ ★</span><span>Masuk sebagai wisudawan →</span></div>
+    </div>
+  </button>
+  <button class="stub-btn tk-shadow" data-act="go" data-to="lo-login"><div class="ticket"><span class="stars">★</span><b>Saya LO</b><span class="muted" style="font-size:13px">Lihat wisudawanmu</span></div></button>
+  <div class="home-foot"><span>Batas pemilihan Jumat, 16 Oktober 2026, 23.59 WIB</span><span aria-hidden="true">·</span><button class="linkbtn" data-act="go" data-to="admin-login">Panitia</button></div>
+</section></div>`}
+
+function vProdi(){return `<div class="wrap narrow stack" style="gap:20px">
+  ${backBtn("home")}
+  <div><div class="eyebrow">Langkah 1 dari 2</div><h1 style="font-size:36px;font-stretch:82%;font-weight:800;margin-top:6px">Program studimu?</h1>
+  <p class="muted" style="margin:6px 0 0">Kamu hanya bisa memilih LO dari himpunan prodimu.</p></div>
+  <div class="prodi-grid">
+    ${["190","192"].map(p=>`<button class="prodi tk-shadow" data-act="prodi" data-p="${p}"><div class="ticket">
+      <span class="code">PRODI ${p}</span><h3>${PRODI[p].nama}</h3>
+      <span class="muted" style="font-size:13.5px">${GRADS.filter(g=>g.prodi===p).length} wisudawan · didampingi LO ${PRODI[p].him}</span>
+      <span class="stars">★ ★ ★</span></div></button>`).join("")}
+  </div></div>`}
+
+function vLogin(){const p=PRODI[S.prodi];const L=S.login;
+  let body;
+  if(L.step==="nim"){body=`<form class="stack" data-form="nim">
+      <label class="f" for="nim">NIM<input class="inp mono" id="nim" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="Contoh: ${S.prodi==="190"?"19023045":"19223012"}" value="${esc(L.nim)}"></label>
+      ${L.err?`<div class="note err">${L.err}</div>`:""}
+      <button class="btn block" type="submit">Lanjut</button></form>`}
+  else if(L.step==="google"){const g=GBY[L.nim];body=`<div class="stack">
+      <div class="note info"><b>${esc(g.nama)}</b><br><span class="mono">${g.nim}</span> · ${p.nama}</div>
+      <p class="muted" style="margin:0;font-size:14px">Untuk memastikan ini benar kamu, masuk dengan akun Google yang emailnya terdaftar di data wisudawan.</p>
+      <button class="gbtn" data-act="google">${I.g}Lanjut dengan Google</button>
+      ${L.err?`<div class="note err">${L.err}</div>`:""}
+      <div class="note warn" style="font-size:12.5px">Membuka dari Instagram, LINE, atau aplikasi chat? Login Google tidak bisa di sana. Buka link ini di Chrome atau Safari. <button class="linkbtn" data-act="copylink">Salin link</button></div>
+      <div class="row" style="justify-content:space-between;font-size:13px"><button class="linkbtn" data-act="login-reset">Bukan kamu? Ganti NIM</button><button class="linkbtn" data-act="manual">Pakai kode dari panitia</button></div>
+      <button class="linkbtn" style="font-size:12.5px;color:var(--ink-3);justify-self:start" data-act="google-fail">Pratinjau: lihat pesan jika akun Google tidak cocok</button></div>`}
+  else if(L.step==="wait"){body=`<div class="row" style="justify-content:center;padding:24px"><span class="spin"></span><span class="muted">Mencocokkan akun Google...</span></div>`}
+  else{body=`<form class="stack" data-form="manual">
+      <p class="muted" style="margin:0;font-size:14px">Kode masuk dibuat panitia untuk wisudawan yang tidak bisa masuk dengan Google. Hubungi panitia LO untuk memintanya.</p>
+      <label class="f" for="mcode">Kode masuk<input class="inp mono" id="mcode" placeholder="6 karakter" maxlength="6" autocomplete="off"></label>
+      <button class="btn block" type="submit">Masuk</button>
+      <button class="linkbtn" type="button" data-act="login-google" style="justify-self:start;font-size:13px">Kembali ke login Google</button></form>`}
+  return `<div class="wrap narrow stack" style="gap:20px">
+  ${backBtn("prodi","Ganti prodi")}
+  <div class="row" style="gap:18px;flex-wrap:nowrap">${port}<div><div class="eyebrow">Langkah 2 dari 2 · ${p.nama}</div>
+  <h1 style="font-size:34px;font-stretch:82%;font-weight:800;margin-top:6px">Masuk dengan NIM</h1></div></div>
+  <div class="card">${body}</div></div>`}
+
+function rowLO(lo,me,q){
+  const m=membersOf(lo.id),n=m.length,c=cap(lo),full=n>=c,mine=me&&S.assign.get(me.nim)?.lo===lo.id;
+  const myA=me&&S.assign.get(me.nim);const fixed=myA&&myA.src!=="sendiri";
+  let btn;
+  if(mine)btn=`<span class="pill neu">LO kamu</span>`;
+  else if(locked())btn=`<button class="btn sm ghost" disabled>Terkunci</button>`;
+  else if(full)btn=`<span class="pill full">Penuh</span>`;
+  else if(fixed)btn=`<button class="btn sm ghost" disabled title="LO kamu ditetapkan panitia">Pilih</button>`;
+  else btn=`<button class="btn sm${myA?" ghost":""}" data-act="pick" data-lo="${lo.id}">${myA?"Pindah ke sini":"Pilih"}</button>`;
+  return `<div class="lo${mine?" mine":""}${full&&!mine?" isfull":""}">
+    <div class="lo-name">${hl(lo.nama,q)}</div><div>${btn}</div>
+    <div class="lo-sub">${seats(n,c)}<span class="mono">${n}/${c}</span>
+      ${n?`<span class="who">${m.map(x=>`<span class="${q&&x.nama.toLowerCase().includes(q.toLowerCase())?"hit":""}">${esc(x.nama.split(" ").slice(0,2).join(" "))}</span>`).join("")}</span>`:`<span class="faint">Belum ada yang memilih</span>`}
+    </div></div>`}
+function listLOs(){const me=S.me;const him=PRODI[me.prodi].him;const q=S.q.trim();
+  let arr=LOS.filter(l=>l.him===him);
+  if(q)arr=arr.filter(l=>l.nama.toLowerCase().includes(q.toLowerCase())||membersOf(l.id).some(x=>x.nama.toLowerCase().includes(q.toLowerCase())));
+  if(S.flt==="slot")arr=arr.filter(l=>loadOf(l.id)<cap(l));
+  if(S.flt==="kosong")arr=arr.filter(l=>loadOf(l.id)===0);
+  const mineId=S.assign.get(me.nim)?.lo;arr.sort((a,b)=>(b.id===mineId)-(a.id===mineId));
+  return arr.length?arr.map(l=>rowLO(l,me,q)).join(""):`<div class="empty-list">Tidak ada LO atau teman dengan nama "${esc(q)}".<br><span class="faint">Coba nama depan saja, misalnya "Rafa".</span></div>`}
+
+function vDash(){const me=S.me,p=PRODI[me.prodi],a=S.assign.get(me.nim),lo=a&&LBY[a.lo];
+  const mates=lo?membersOf(lo.id).filter(x=>x.nim!==me.nim):[];
+  const myReqs=S.reqs.filter(r=>r.by===me.nim||r.teman.includes(me.nim));
+  const free=LOS.filter(l=>l.him===p.him&&loadOf(l.id)<cap(l)).length;
+  return `<div class="wrap">
+  <div class="dash-head"><div><div class="eyebrow">${p.nama} · LO ${p.him}</div><h1>Halo, ${esc(first(me.nama))}</h1>
+    <div class="muted" style="font-size:13.5px"><span class="mono">${me.nim}</span> · ${esc(me.nama)}</div></div>
+    <button class="btn ghost sm" data-act="logout">Keluar</button></div>
+  ${locked()?`<div class="note warn" style="margin-bottom:16px"><b>Pemilihan sudah ditutup.</b> ${lo?"LO kamu sudah tercatat di bawah.":"Panitia akan memilihkan LO untukmu dan hasilnya akan muncul di halaman ini."}</div>`:""}
+  <div class="grid2">
+    <div class="stack" style="gap:18px">
+      <div class="status tk-shadow ${lo?"":"empty"}"><div class="ticket">
+        <div class="row" style="justify-content:space-between"><span class="eyebrow">Status</span><span class="stars">★ ★ ★</span></div>
+        ${lo?`<div class="band">${esc(lo.nama)}</div>
+          <div style="font-size:13.5px"><span class="muted">Didampingi bersama:</span> ${mates.length?mates.map(x=>esc(x.nama)).join(", "):'<span class="faint">belum ada, ajak temanmu</span>'}</div>
+          <div class="perf row" style="justify-content:space-between"><span class="pill ${a.src==="sendiri"?"neu":"ok"}">${SRC[a.src]}</span>
+          ${a.src==="sendiri"&&!locked()?`<button class="btn danger sm" data-act="cancel">Batalkan pilihan</button>`:a.src!=="sendiri"?`<span class="faint" style="font-size:12.5px">Ditetapkan panitia. Hubungi panitia untuk perubahan.</span>`:""}</div>`
+        :`<div class="band">Belum memilih LO</div><div class="muted" style="font-size:13.5px">${free} LO ${p.him} masih punya slot. Pilih dari daftar LO di bawah ini.</div>`}
+      </div></div>
+      <div class="card stack"><div class="eyebrow">Ketentuan</div>
+        <ol class="rules">
+          <li><span>Kamu bebas memilih LO masing-masing. Silakan janjian dengan teman supaya didampingi LO yang sama.</span></li>
+          <li><span>Kalau sampai batas waktu kamu belum memilih, panitia wisuda yang akan memilihkan LO untukmu.</span></li>
+          <li><span>Batas waktu pemilihan <b>Jumat, 16 Oktober 2026, 23.59 WIB</b>.</span></li>
+        </ol>${countdownHTML()}</div>
+    </div>
+    <div>
+      <div class="list-head"><h2>LO ${p.him}</h2><span class="faint mono" style="font-size:12.5px">${LOS.filter(l=>l.him===p.him).length} LO · kuota ${S.quota} per LO</span></div>
+      <div class="list-head"><div class="search">${I.search}<input class="inp" id="q" type="search" placeholder="Cari nama LO atau nama temanmu" value="${esc(S.q)}" aria-label="Cari LO atau teman"></div>
+        <div class="chips">${[["semua","Semua"],["slot","Masih ada slot"],["kosong","Masih kosong"]].map(([k,t])=>`<button class="chip" data-act="flt" data-f="${k}" aria-pressed="${S.flt===k}">${t}</button>`).join("")}</div></div>
+      <div class="lo-list" id="lo-list">${listLOs()}</div>
+    </div>
+  </div>
+  <section class="sec grid2">
+    <div><h2>Request khusus</h2><p class="muted" style="margin:0 0 12px;font-size:14px">Untuk kasus di luar ketentuan, misalnya 5 orang ingin satu LO, atau 6 wisudawan ingin 3 LO yang bersahabat. Panitia akan meninjau dan mengabarkan hasilnya di sini.</p>
+      ${myReqs.length?`<div class="stack" style="gap:10px"><div class="eyebrow">Request yang melibatkan kamu</div>${myReqs.map(r=>reqCard(r,false)).join("")}</div>`:`<div class="empty-list" style="padding:18px;font-size:14px">Belum ada request yang melibatkan kamu.</div>`}</div>
+    ${reqForm()}
+  </section></div>`}
+
+function reqForm(){const d=S.draft,him=PRODI[S.me.prodi].him;
+  const loS=d.loQ.trim()?LOS.filter(l=>l.him===him&&!d.los.includes(l.id)&&l.nama.toLowerCase().includes(d.loQ.toLowerCase())).slice(0,6):[];
+  return `<form class="card stack" data-form="req">
+    <label class="f" for="rj">Jenis permintaan<select class="inp" id="rj" ${locked()?"disabled":""}>
+      <option value="">Pilih jenis permintaan</option>
+      ${["Lebih dari 3 orang ingin satu LO","Beberapa LO untuk satu kelompok teman","Lainnya"].map(o=>`<option ${d.jenis===o?"selected":""}>${o}</option>`).join("")}</select></label>
+    <div class="f" style="display:grid;gap:6px;font-weight:600;font-size:13.5px"><label for="rlo">LO yang diminta <span class="faint" style="font-weight:400">(bisa lebih dari satu)</span></label>
+      ${d.los.length?`<div class="tag-in">${d.los.map(id=>`<span class="tag">${esc(LBY[id].nama)}<button type="button" data-act="rm-lo" data-id="${id}" aria-label="Hapus">×</button></span>`).join("")}</div>`:""}
+      <input class="inp" id="rlo" placeholder="Ketik nama LO ${him}" value="${esc(d.loQ)}" autocomplete="off" ${locked()?"disabled":""}>
+      ${loS.length?`<div class="sugg">${loS.map(l=>`<button type="button" data-act="add-lo" data-id="${l.id}"><span>${esc(l.nama)}</span><span class="mono faint">${loadOf(l.id)}/${cap(l)}</span></button>`).join("")}</div>`:""}</div>
+    <div class="f" style="display:grid;gap:6px;font-weight:600;font-size:13.5px"><label for="rnim">NIM teman yang ikut</label>
+      ${d.teman.length?`<div class="tag-in">${d.teman.map(n=>`<span class="tag"><span class="mono">${n}</span> ${esc(first(GBY[n].nama))}<button type="button" data-act="rm-nim" data-id="${n}" aria-label="Hapus">×</button></span>`).join("")}</div>`:""}
+      <div class="row" style="flex-wrap:nowrap"><input class="inp mono" id="rnim" inputmode="numeric" maxlength="8" placeholder="8 digit NIM" value="${esc(d.nimQ)}" autocomplete="off" ${locked()?"disabled":""}><button type="button" class="btn ghost" data-act="add-nim" ${locked()?"disabled":""}>Tambah</button></div>
+      ${d.err?`<div class="note err" style="font-weight:400">${d.err}</div>`:""}</div>
+    <label class="f" for="rk">Keterangan<textarea class="inp" id="rk" placeholder="Ceritakan alasanmu dan siapa saja yang terlibat" ${locked()?"disabled":""}>${esc(d.ket)}</textarea></label>
+    <button class="btn block" type="submit" ${locked()?"disabled":""}>${locked()?"Pengajuan ditutup":"Kirim request"}</button></form>`}
+
+function reqCard(r,admin){const by=GBY[r.by];
+  const ppl=[r.by,...r.teman].map(n=>GBY[n]);
+  return `<div class="req"><div class="top"><div><b>${esc(r.jenis)}</b><div class="faint mono" style="font-size:12px">${r.id} · ${fmtT(r.t)}</div></div>${statusPill(r.status)}</div>
+    <dl class="kv"><dt>Pengaju</dt><dd>${esc(by.nama)} <span class="mono faint">${by.nim}</span></dd>
+    <dt>Wisudawan</dt><dd>${ppl.map(g=>esc(g.nama.split(" ").slice(0,2).join(" "))).join(", ")} <span class="faint">(${ppl.length} orang)</span></dd>
+    <dt>LO diminta</dt><dd>${r.los.map(id=>`${esc(LBY[id].nama)} <span class="mono faint">${loadOf(id)}/${cap(LBY[id])}</span>`).join("<br>")}</dd>
+    <dt>Keterangan</dt><dd>${esc(r.ket)}</dd>
+    ${r.note&&!admin?`<dt>Catatan panitia</dt><dd>${esc(r.note)}</dd>`:""}</dl>
+    ${admin?`<label class="f" for="note-${r.id}" style="font-weight:500">Catatan panitia<textarea class="inp" id="note-${r.id}" style="min-height:60px" placeholder="Terlihat oleh wisudawan">${esc(r.note)}</textarea></label>
+      <div class="row">
+        ${r.status==="menunggu"?`<button class="btn sm" data-act="req-set" data-id="${r.id}" data-s="disetujui">Setujui</button><button class="btn sm danger" data-act="req-set" data-id="${r.id}" data-s="ditolak">Tolak</button>`:""}
+        ${r.status==="disetujui"?`<button class="btn sm" data-act="req-apply" data-id="${r.id}">Tetapkan ke LO</button><button class="btn sm ghost" data-act="req-set" data-id="${r.id}" data-s="selesai">Tandai selesai</button>`:""}
+        ${r.status!=="menunggu"?`<button class="btn sm ghost" data-act="req-set" data-id="${r.id}" data-s="menunggu">Kembalikan ke menunggu</button>`:""}
+      </div>`:""}</div>`}
+
+/* LO */
+function vLoLogin(){return `<div class="wrap narrow stack" style="gap:20px">${backBtn("home")}
+  <div><div class="eyebrow">Liaison Officer</div><h1 style="font-size:36px;font-stretch:82%;font-weight:800;margin-top:6px">Masuk sebagai LO</h1>
+  <p class="muted" style="margin:6px 0 0">Gunakan kode akses yang dibagikan panitia. Kode ini unik untuk setiap LO.</p></div>
+  <form class="card stack" data-form="lo">
+    <label class="f" for="locode">Kode akses<input class="inp mono" id="locode" placeholder="KMM-XXXXX" autocomplete="off" style="text-transform:uppercase"></label>
+    <div id="lo-err"></div><button class="btn block" type="submit">Masuk</button>
+    <div class="faint" style="font-size:12.5px">Pratinjau: coba kode <button type="button" class="linkbtn mono" data-act="fill-lo">${LOS[31].code}</button></div></form></div>`}
+function vLo(){const lo=S.lo,m=membersOf(lo.id),reqs=S.reqs.filter(r=>r.los.includes(lo.id));
+  return `<div class="wrap">
+  <div class="dash-head"><div><div class="eyebrow">LO ${lo.him} · ${lo.him==="KMM"?"Manajemen":"Kewirausahaan"}</div><h1>${esc(lo.nama)}</h1></div><button class="btn ghost sm" data-act="logout">Keluar</button></div>
+  <div class="grid2">
+    <div class="status tk-shadow"><div class="ticket"><div class="row" style="justify-content:space-between"><span class="eyebrow">Wisudawanmu</span><span class="stars">★ ★ ★</span></div>
+      <div class="band" style="font-size:44px;text-align:center">${m.length} / ${cap(lo)}</div>
+      <div class="muted" style="font-size:13.5px">${m.length>=cap(lo)?"Kuotamu sudah penuh.":`Masih ada ${cap(lo)-m.length} slot.`} Pilihan ditutup Jumat, 16 Oktober 2026, 23.59 WIB.</div></div></div>
+    <div class="stack">
+      <div class="tbl-wrap"><table><thead><tr><th>Nama</th><th>NIM</th><th>Prodi</th><th>Sumber</th></tr></thead><tbody>
+      ${m.length?m.map(g=>`<tr><td>${esc(g.nama)}</td><td class="mono">${g.nim}</td><td>${PRODI[g.prodi].nama}</td><td>${SRC[g.src]}</td></tr>`).join(""):`<tr><td colspan="4" class="muted" style="text-align:center;padding:24px">Belum ada wisudawan yang memilihmu.</td></tr>`}</tbody></table></div>
+      <h2 style="font-size:22px;font-stretch:85%;font-weight:800;margin-top:8px">Request khusus yang menyebut kamu</h2>
+      ${reqs.length?reqs.map(r=>reqCard(r,false)).join(""):`<div class="empty-list" style="padding:18px">Tidak ada request yang menyebut namamu.</div>`}
+    </div></div></div>`}
+
+/* Panitia */
+function vAdminLogin(){return `<div class="wrap narrow stack" style="gap:20px">${backBtn("home")}
+  <div><div class="eyebrow">Panitia LO</div><h1 style="font-size:36px;font-stretch:82%;font-weight:800;margin-top:6px">Panel panitia</h1></div>
+  <form class="card stack" data-form="admin"><label class="f" for="apw">Kode admin<input class="inp mono" id="apw" type="password" autocomplete="current-password"></label>
+  <button class="btn block" type="submit">Masuk</button><div class="faint" style="font-size:12.5px">Pratinjau: kode apa saja diterima.</div></form></div>`}
+function vAdmin(){const pend=S.reqs.filter(r=>r.status==="menunggu").length;
+  const tabs=[["ringkasan","Ringkasan"],["wisudawan","Wisudawan"],["request","Request",pend],["lo","LO & kode"],["export","Export"],["atur","Pengaturan"],["log","Log"]];
+  return `<div class="wrap"><div class="dash-head"><div><div class="eyebrow">Panitia LO · Wisuda Oktober 2026</div><h1>Panel panitia</h1></div><button class="btn ghost sm" data-act="logout">Keluar</button></div>
+  <div class="tabs" role="tablist">${tabs.map(([k,t,c])=>`<button role="tab" aria-selected="${S.tab===k}" data-act="tab" data-t="${k}">${t}${c?`<span class="count">${c}</span>`:""}</button>`).join("")}</div>
+  <div id="tabbody">${({ringkasan:tRing,wisudawan:tWis,request:tReq,lo:tLo,export:tExp,atur:tAtur,log:tLog})[S.tab]()}</div></div>`}
+function tRing(){
+  const per=p=>{const all=GRADS.filter(g=>g.prodi===p);const done=all.filter(g=>S.assign.has(g.nim)).length;return{all:all.length,done}};
+  const m=per("190"),k=per("192"),tot=m.done+k.done;
+  const hist=him=>{const b=[0,0,0,0,0];LOS.filter(l=>l.him===him).forEach(l=>{const n=loadOf(l.id);b[Math.min(n,4)]++});return b};
+  const H=him=>{const b=hist(him),mx=Math.max(...b,1);return `<div class="card stack"><div class="row" style="justify-content:space-between"><b>Beban LO ${him}</b><span class="faint mono" style="font-size:12px">jumlah LO per beban</span></div>
+    <div class="hist">${b.map((v,i)=>`<div><span class="v">${v}</span><div class="col${i>3?" over":""}" style="height:${v/mx*90}px"></div><span class="l">${i<4?i+" orang":"> 3"}</span></div>`).join("")}</div></div>`};
+  const cards=[["Sudah memilih",tot,248],["Manajemen",m.done,m.all],["Kewirausahaan",k.done,k.all]];
+  return `<div class="stack" style="gap:16px">
+  <div class="stats">${cards.map(([t,a,b])=>`<div class="stat"><span class="eyebrow">${t}</span><span class="n">${a}<small> / ${b}</small></span><div class="bar"><i style="width:${a/b*100}%"></i></div><span class="faint" style="font-size:12.5px">${b-a} belum memilih</span></div>`).join("")}
+    <div class="stat"><span class="eyebrow">${locked()?"Pemilihan ditutup":"Sisa waktu"}</span>${countdownHTML()}</div></div>
+  <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">${H("KMM")}${H("IMK")}</div>
+  <div class="card stack"><div class="row" style="justify-content:space-between"><div><b>Tempatkan otomatis</b><div class="muted" style="font-size:13.5px">Isi ${248-tot} wisudawan yang belum memilih ke LO himpunan yang sama dengan beban paling rendah. Hasilnya tetap bisa dikoreksi manual.</div></div>
+    <button class="btn" data-act="auto" ${locked()&&248-tot>0?"":"disabled"}>Tempatkan otomatis</button></div>
+    ${locked()?"":`<div class="note info">Tombol aktif setelah batas waktu. Gunakan "Simulasikan lewat deadline" di bar atas untuk mencoba.</div>`}</div></div>`}
+function tWis(){const q=S.aq.trim().toLowerCase();
+  let arr=GRADS.filter(g=>!q||g.nama.toLowerCase().includes(q)||g.nim.includes(q));
+  if(S.aflt==="belum")arr=arr.filter(g=>!S.assign.has(g.nim));if(S.aflt==="sudah")arr=arr.filter(g=>S.assign.has(g.nim));
+  return `<div class="list-head"><div class="search">${I.search}<input class="inp" id="aq" type="search" placeholder="Cari nama atau NIM" value="${esc(S.aq)}"></div>
+    <div class="chips">${[["semua","Semua"],["belum","Belum memilih"],["sudah","Sudah"]].map(([k,t])=>`<button class="chip" data-act="aflt" data-f="${k}" aria-pressed="${S.aflt===k}">${t}</button>`).join("")}</div></div>
+  <div class="tbl-wrap"><table><thead><tr><th>NIM</th><th>Nama</th><th>Prodi</th><th>LO</th><th>Sumber</th><th></th></tr></thead><tbody id="wis-body">
+  ${arr.slice(0,60).map(g=>{const a=S.assign.get(g.nim);return `<tr><td class="mono">${g.nim}</td><td>${esc(g.nama)}${CATATAN[g.nim]?`<div><span class="pill warn">${esc(CATATAN[g.nim])}</span></div>`:""}</td><td>${PRODI[g.prodi].nama}</td>
+    <td>${a?esc(LBY[a.lo].nama):'<span class="faint">Belum</span>'}</td><td>${a?SRC[a.src]:""}</td><td><button class="btn sm ghost" data-act="adm-edit" data-nim="${g.nim}">Atur</button></td></tr>`}).join("")}
+  </tbody></table></div><p class="faint" style="font-size:12.5px">Menampilkan ${Math.min(60,arr.length)} dari ${arr.length} wisudawan.</p>`}
+function tReq(){const order={menunggu:0,disetujui:1,selesai:2,ditolak:3};
+  return `<div class="stack">${[...S.reqs].sort((a,b)=>order[a.status]-order[b.status]).map(r=>reqCard(r,true)).join("")}</div>`}
+function tLo(){return `<div class="list-head"><p class="muted" style="margin:0;flex:1;font-size:14px">Kode akses dibuat otomatis untuk tiap LO. Bagikan lewat japri, bukan di grup.</p>
+  <button class="btn ghost sm" data-act="copy-codes">Salin semua kode</button><button class="btn ghost sm" data-act="regen">Buat ulang kode</button></div>
+  <div class="tbl-wrap"><table><thead><tr><th>Himpunan</th><th>Nama LO</th><th>Beban</th><th>Kuota</th><th>Kode akses</th></tr></thead><tbody>
+  ${LOS.map(l=>{const n=loadOf(l.id);return `<tr><td class="mono">${l.him}</td><td>${esc(l.nama)}</td><td>${seats(n,cap(l))} <span class="mono">${n}</span></td><td class="mono">${cap(l)}${l.quota!=null?" *":""}</td><td class="mono">${l.code}</td></tr>`}).join("")}</tbody></table></div>`}
+function csv(){const rows=[["NIM","Nama","Prodi","LO","Himpunan LO","Sumber penetapan"]];
+  GRADS.forEach(g=>{const a=S.assign.get(g.nim);rows.push([g.nim,g.nama,PRODI[g.prodi].nama,a?LBY[a.lo].nama:"",a?LBY[a.lo].him:"",a?SRC[a.src]:"Belum ada"])});
+  return rows.map(r=>r.map(c=>/[",\n]/.test(c)?`"${c.replace(/"/g,'""')}"`:c).join(",")).join("\n")}
+function tExp(){const c=csv().split("\n");
+  return `<div class="stack"><div class="row"><button class="btn" data-act="dl" data-f="CSV">Unduh CSV</button><button class="btn ghost" data-act="dl" data-f="Excel">Unduh Excel</button><span class="faint" style="font-size:13px">${c.length-1} baris · urut NIM</span></div>
+  <div class="tbl-wrap"><table><thead><tr>${c[0].split(",").map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>
+  ${GRADS.slice(0,12).map(g=>{const a=S.assign.get(g.nim);return `<tr><td class="mono">${g.nim}</td><td>${esc(g.nama)}</td><td>${PRODI[g.prodi].nama}</td><td>${a?esc(LBY[a.lo].nama):""}</td><td class="mono">${a?LBY[a.lo].him:""}</td><td>${a?SRC[a.src]:'<span class="faint">Belum ada</span>'}</td></tr>`}).join("")}
+  </tbody></table></div><p class="faint" style="font-size:12.5px">Pratinjau 12 baris pertama.</p></div>`}
+function tAtur(){const dl=new Date(S.deadline.getTime()+7*3600e3).toISOString().slice(0,16);
+  return `<form class="card stack" data-form="atur" style="max-width:520px">
+  <label class="f" for="kq">Kuota default per LO<input class="inp mono" id="kq" type="number" min="1" max="10" value="${S.quota}"></label>
+  <label class="f" for="kd">Batas waktu pemilihan (WIB)<input class="inp mono" id="kd" type="datetime-local" value="${dl}"></label>
+  <div class="note info">Mengurangi kuota tidak mengeluarkan wisudawan yang sudah memilih. LO yang bebannya di atas kuota baru akan ditandai.</div>
+  <button class="btn" type="submit">Simpan pengaturan</button></form>`}
+function tLog(){return `<div class="tbl-wrap"><table><thead><tr><th>Waktu</th><th>Pelaku</th><th>Aksi</th><th>Wisudawan</th><th>Detail</th></tr></thead><tbody>
+  ${S.logs.slice(0,80).map(l=>`<tr><td class="mono" style="white-space:nowrap">${fmtT(l.t)}</td><td>${esc(l.actor)}</td><td>${l.action}</td><td>${l.nim?`${esc(GBY[l.nim].nama.split(" ").slice(0,2).join(" "))} <span class="mono faint">${l.nim}</span>`:""}</td>
+  <td>${l.from?esc(LBY[l.from].nama):""}${l.from&&l.to?" → ":""}${l.to?esc(LBY[l.to].nama):""}${l.extra?esc(l.extra):""}</td></tr>`).join("")}</tbody></table></div>`}
+
+/* ===== Render & interaksi ===== */
+const app=document.getElementById("app"),layer=document.getElementById("layer");
+function render(){
+  const v={home:vHome,prodi:vProdi,login:vLogin,dash:vDash,"lo-login":vLoLogin,lo:vLo,"admin-login":vAdminLogin,admin:vAdmin}[S.view];
+  app.innerHTML=v();tick();
+  document.querySelectorAll(".flora").forEach(f=>f.style.display=S.view==="home"?"":"none");
+}
+function toast(msg){layer.querySelector(".toast")?.remove();const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;layer.appendChild(t);setTimeout(()=>t.remove(),2800)}
+function modal(html,onYes){closeModal();const d=document.createElement("div");d.className="scrim";d.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;
+  d.addEventListener("click",e=>{if(e.target===d||e.target.closest("[data-x]"))closeModal();const y=e.target.closest("[data-yes]");if(y){onYes(d,y);}});layer.appendChild(d);d.querySelector("button,select,input")?.focus()}
+function closeModal(){layer.querySelector(".scrim")?.remove()}
+function tick(){const ms=Math.max(0,S.deadline.getTime()-now());const d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60,s=Math.floor(ms/1e3)%60;
+  document.querySelectorAll("[data-cd]").forEach(c=>{c.querySelector("[data-d]").textContent=d;c.querySelector("[data-h]").textContent=String(h).padStart(2,"0");c.querySelector("[data-m]").textContent=String(m).padStart(2,"0");c.querySelector("[data-s]").textContent=String(s).padStart(2,"0")})}
+setInterval(tick,1000);
+const go=v=>{S.view=v;window.scrollTo(0,0);render()};
+
+function pick(id){const me=S.me,lo=LBY[id],a=S.assign.get(me.nim);
+  if(locked())return toast("Pemilihan sudah ditutup.");
+  if(loadOf(id)>=cap(lo))return toast("LO ini baru saja penuh. Pilih LO lain.");
+  const others=membersOf(id);
+  modal(`<span class="eyebrow">${a?"Pindah LO":"Konfirmasi pilihan"}</span><h3>${a?`Pindah ke ${esc(lo.nama)}?`:`Pilih ${esc(lo.nama)}?`}</h3>
+    <p class="muted" style="margin:0;font-size:14px">${a?`Slot kamu di <b>${esc(LBY[a.lo].nama)}</b> akan dilepas dan bisa diambil orang lain.`:"Kamu masih bisa membatalkan atau pindah sebelum batas waktu."}
+    ${others.length?`<br>Sudah memilih: ${others.map(x=>esc(x.nama)).join(", ")}.`:""}</p>
+    <div class="row" style="justify-content:flex-end"><button class="btn ghost" data-x>Batal</button><button class="btn" data-yes>${a?"Ya, pindah":"Ya, pilih"}</button></div>`,()=>{
+    closeModal();if(loadOf(id)>=cap(lo))return toast("LO ini baru saja penuh. Pilih LO lain.");
+    S.assign.set(me.nim,{lo:id,src:"sendiri"});log(me.nama,a?"pindah":"memilih",me.nim,a?.lo,id);
+    render();toast(a?`Kamu pindah ke ${lo.nama}.`:`Kamu memilih ${lo.nama}.`)})}
+
+function adminEdit(nim){const g=GBY[nim],a=S.assign.get(nim),him=PRODI[g.prodi].him;
+  modal(`<span class="eyebrow">Atur LO · ${PRODI[g.prodi].nama}</span><h3>${esc(g.nama)}</h3><span class="mono faint">${g.nim}</span>
+    <label class="f" for="ae-lo">LO ${him}<select class="inp" id="ae-lo">${LOS.filter(l=>l.him===him).map(l=>{const n=loadOf(l.id);return `<option value="${l.id}" ${a?.lo===l.id?"selected":""}>${esc(l.nama)} (${n}/${cap(l)})</option>`}).join("")}</select></label>
+    <label class="row" style="font-size:14px;gap:8px"><input type="checkbox" id="ae-over"> Izinkan melebihi kuota</label>
+    <label class="f" for="ae-src">Sumber<select class="inp" id="ae-src"><option value="panitia">Panitia</option><option value="request">Request</option></select></label>
+    <div class="row" style="justify-content:space-between">${a?`<button class="btn danger" data-yes data-k="rel">Lepaskan dari LO</button>`:"<span></span>"}<div class="row"><button class="btn ghost" data-x>Batal</button><button class="btn" data-yes data-k="save">Simpan</button></div></div>`,(d,y)=>{
+    const k=y.dataset.k;
+    if(k==="rel"){S.assign.delete(nim);log("Panitia","melepaskan",nim,a.lo,null);closeModal();render();return toast("Wisudawan dilepas dari LO.")}
+    const id=d.querySelector("#ae-lo").value,over=d.querySelector("#ae-over").checked,lo=LBY[id];
+    if(a?.lo!==id&&loadOf(id)>=cap(lo)&&!over)return toast("LO ini penuh. Centang izinkan melebihi kuota.");
+    S.assign.set(nim,{lo:id,src:d.querySelector("#ae-src").value});log("Panitia",a?"memindahkan":"menetapkan",nim,a?.lo,id);closeModal();render();toast("Penetapan disimpan.")})}
+
+document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;const A=b.dataset.act;
+  switch(A){
+  case"go":go(b.dataset.to);break;
+  case"prodi":S.prodi=b.dataset.p;S.login={nim:"",err:null,step:"nim"};go("login");break;
+  case"google":S.login.step="wait";render();setTimeout(()=>{S.me=GBY[S.login.nim];S.q="";S.flt="semua";go("dash");toast("Berhasil masuk.")},900);break;
+  case"google-fail":S.login.err="Akun Google ini tidak terdaftar untuk NIM tersebut. Masuk dengan email yang kamu daftarkan, atau minta kode masuk ke panitia.";render();break;
+  case"login-reset":S.login={nim:"",err:null,step:"nim"};render();break;
+  case"manual":S.login.step="manual";S.login.err=null;render();break;
+  case"login-google":S.login.step="google";render();break;
+  case"copylink":navigator.clipboard?.writeText(location.href).then(()=>toast("Link disalin."),()=>toast("Salin link dari bilah alamat."));break;
+  case"logout":S.me=null;S.lo=null;S.admin=false;go("home");break;
+  case"pick":pick(b.dataset.lo);break;
+  case"cancel":modal(`<span class="eyebrow">Batalkan pilihan</span><h3>Lepas ${esc(LBY[S.assign.get(S.me.nim).lo].nama)}?</h3><p class="muted" style="margin:0;font-size:14px">Slotmu akan terbuka untuk orang lain. Kalau sampai batas waktu kamu belum memilih lagi, panitia yang akan memilihkan.</p>
+    <div class="row" style="justify-content:flex-end"><button class="btn ghost" data-x>Tidak jadi</button><button class="btn danger" data-yes>Ya, batalkan</button></div>`,()=>{const a=S.assign.get(S.me.nim);S.assign.delete(S.me.nim);log(S.me.nama,"membatalkan",S.me.nim,a.lo,null);closeModal();render();toast("Pilihan LO dibatalkan.")});break;
+  case"flt":S.flt=b.dataset.f;render();break;
+  case"add-lo":S.draft.los.push(b.dataset.id);S.draft.loQ="";render();document.getElementById("rlo")?.focus();break;
+  case"rm-lo":S.draft.los=S.draft.los.filter(x=>x!==b.dataset.id);render();break;
+  case"rm-nim":S.draft.teman=S.draft.teman.filter(x=>x!==b.dataset.id);render();break;
+  case"add-nim":{const d=S.draft,n=d.nimQ.trim(),g=GBY[n];d.err=null;
+    if(!/^\d{8}$/.test(n))d.err="NIM harus 8 digit angka.";else if(!g)d.err=`NIM ${esc(n)} tidak ada di data wisudawan Oktober 2026.`;
+    else if(n===S.me.nim)d.err="Itu NIM kamu sendiri.";else if(g.prodi!==S.me.prodi)d.err=`${esc(g.nama)} terdaftar di ${PRODI[g.prodi].nama}, jadi tidak bisa memakai LO ${PRODI[S.me.prodi].him}.`;
+    else if(d.teman.includes(n))d.err="NIM ini sudah ditambahkan.";else{d.teman.push(n);d.nimQ=""}
+    render();document.getElementById("rnim")?.focus();break}
+  case"tab":S.tab=b.dataset.t;render();break;
+  case"aflt":S.aflt=b.dataset.f;render();break;
+  case"adm-edit":adminEdit(b.dataset.nim);break;
+  case"req-set":{const r=S.reqs.find(x=>x.id===b.dataset.id);r.note=document.getElementById("note-"+r.id)?.value??r.note;r.status=b.dataset.s;log("Panitia","request "+r.status,r.by,null,null," "+r.id);render();toast(`Request ${r.id}: ${r.status}.`);break}
+  case"req-apply":{const r=S.reqs.find(x=>x.id===b.dataset.id);const ppl=[r.by,...r.teman];
+    ppl.forEach((n,i)=>{const id=r.los[i%r.los.length];const a=S.assign.get(n);S.assign.set(n,{lo:id,src:"request"});log("Panitia","menetapkan (request)",n,a?.lo,id)});
+    render();toast(`${ppl.length} wisudawan ditetapkan ke ${r.los.length} LO.`);break}
+  case"auto":{let c=0;GRADS.filter(g=>!S.assign.has(g.nim)).forEach(g=>{const pool=LOS.filter(l=>l.him===PRODI[g.prodi].him).sort((a,b)=>loadOf(a.id)-loadOf(b.id));S.assign.set(g.nim,{lo:pool[0].id,src:"otomatis"});log("Sistem","menempatkan otomatis",g.nim,null,pool[0].id);c++});render();toast(`${c} wisudawan ditempatkan otomatis.`);break}
+  case"copy-codes":navigator.clipboard?.writeText(LOS.map(l=>`${l.him},${l.nama},${l.code}`).join("\n")).then(()=>toast("Daftar kode disalin."),()=>toast("Gagal menyalin."));break;
+  case"regen":toast("Di versi asli, kode lama langsung tidak berlaku.");break;
+  case"dl":toast(`Di versi asli, file ${b.dataset.f} akan terunduh.`);break;
+  case"fill-lo":document.getElementById("locode").value=b.textContent;break;
+  case"pv-home":go("home");break;
+  case"pv-wis":S.me=GBY["19023045"];S.prodi="190";go("dash");break;
+  case"pv-lo":S.lo=LOS[31];go("lo");break;
+  case"pv-admin":S.admin=true;go("admin");break;
+  case"pv-dead":S.simAfter=!S.simAfter;b.setAttribute("aria-pressed",S.simAfter);render();toast(S.simAfter?"Simulasi: batas waktu sudah lewat.":"Simulasi dimatikan.");break;
+  case"pv-theme":{const o=["system","light","dark"];S.theme=o[(o.indexOf(S.theme)+1)%3];if(S.theme==="system")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",S.theme);b.textContent="Tema: "+({system:"sistem",light:"terang",dark:"gelap"})[S.theme];break}
+  }});
+document.addEventListener("submit",e=>{e.preventDefault();const f=e.target.dataset.form;
+  if(f==="nim"){const n=document.getElementById("nim").value.trim();S.login.nim=n;const g=GBY[n];
+    if(!/^\d{8}$/.test(n))S.login.err="NIM harus 8 digit angka.";
+    else if(!g)S.login.err="NIM ini tidak ada di data wisudawan Oktober 2026. Hubungi panitia LO untuk memastikan datamu.";
+    else if(g.prodi!==S.prodi)S.login.err=`NIM ini terdaftar di prodi ${PRODI[g.prodi].nama}. <button class="linkbtn" data-act="prodi" data-p="${g.prodi}">Pindah ke ${PRODI[g.prodi].nama}</button>`;
+    else{S.login.err=null;S.login.step="google"}
+    render();if(S.login.step==="nim"&&S.login.err&&g&&g.prodi!==S.prodi){}return}
+  if(f==="manual"){const v=document.getElementById("mcode").value.trim();if(v.length<6)return toast("Kode masuk terdiri dari 6 karakter.");S.me=GBY[S.login.nim];go("dash");return}
+  if(f==="lo"){const v=document.getElementById("locode").value.trim().toUpperCase();const lo=LOS.find(l=>l.code===v);
+    if(!lo){document.getElementById("lo-err").innerHTML=`<div class="note err">Kode akses tidak dikenali. Periksa lagi atau hubungi panitia.</div>`;return}S.lo=lo;go("lo");return}
+  if(f==="admin"){S.admin=true;go("admin");return}
+  if(f==="atur"){const q=+document.getElementById("kq").value;const d=document.getElementById("kd").value;if(q>=1)S.quota=q;if(d)S.deadline=new Date(d+":00+07:00");log("Panitia","mengubah pengaturan",null,null,null,`kuota ${S.quota}`);render();toast("Pengaturan disimpan.");return}
+  if(f==="req"){const d=S.draft;d.jenis=document.getElementById("rj").value;d.ket=document.getElementById("rk").value.trim();
+    if(!d.jenis)return toast("Pilih jenis permintaan dulu.");if(!d.los.length)return toast("Tambahkan minimal satu LO.");if(!d.ket)return toast("Isi keterangan singkat.");
+    const id="R-0"+(15+S.reqs.length);S.reqs.unshift({id,by:S.me.nim,jenis:d.jenis,los:[...d.los],teman:[...d.teman],ket:d.ket,status:"menunggu",note:"",t:now()});
+    log(S.me.nama,"mengirim request",S.me.nim,null,null," "+id);S.draft={jenis:"",los:[],teman:[],ket:"",loQ:"",nimQ:"",err:null};render();toast("Request terkirim. Pantau statusnya di halaman ini.");}
+});
+document.addEventListener("input",e=>{const t=e.target;
+  if(t.id==="q"){S.q=t.value;document.getElementById("lo-list").innerHTML=listLOs()}
+  if(t.id==="aq"){S.aq=t.value;const pos=t.selectionStart;render();const n=document.getElementById("aq");n.focus();n.setSelectionRange(pos,pos)}
+  if(t.id==="rlo"){S.draft.loQ=t.value;S.draft.jenis=document.getElementById("rj").value;S.draft.ket=document.getElementById("rk").value;const pos=t.selectionStart;render();const n=document.getElementById("rlo");n.focus();n.setSelectionRange(pos,pos)}
+  if(t.id==="rnim"){S.draft.nimQ=t.value.replace(/\D/g,"")}
+  if(t.id==="rk")S.draft.ket=t.value;
+});
+document.addEventListener("change",e=>{if(e.target.id==="rj")S.draft.jenis=e.target.value});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();if(e.key==="Enter"&&e.target.id==="rnim"){e.preventDefault();document.querySelector('[data-act="add-nim"]').click()}});
+render();
+</script>
